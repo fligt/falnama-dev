@@ -1,0 +1,89 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to the Falnama project",
+    "section": "",
+    "text": "In the fall of 2024 our small research team started to investigate the Falnama (Persian) manuscript that is hold by the Wereldmuseum Rotterdam. This beautiful manuscript consists of 35 loose pages and brings many questions to the table. To get an impression see three of the pages below.\n\nFig. 1 (left) Al Ar-Rida (Sjah of Khorasan), de Waterpeople and the Demon, Falnama folia 10 of 35, WM-71803-10 (middle) The Sun, folio 2, WM-71803-2 (right) Day of Judgement, folio 30, WM-71803-30, Collectie Wereldmuseum Rotterdam.\nWhat are the stories of these pages? On this website we want to showcase this fascinating manuscript and highlight some of the hidden traces that evidence its origins and history.\nWe also want to enable you to take a look into our ‘research kitchen’. On which data do we base our findings? And how did we process this data? If you are interested into data science you can find the Python code that we developed to make this work in the second part of this website.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "gallery/core.html",
+    "href": "gallery/core.html",
+    "title": "An overview",
+    "section": "",
+    "text": "Deepzoom gallery here",
+    "crumbs": [
+      "Gallery",
+      "An overview"
+    ]
+  },
+  {
+    "objectID": "functions/getting-started.html",
+    "href": "functions/getting-started.html",
+    "title": "Getting started with Python",
+    "section": "",
+    "text": "n order to make full use of the falnama-dev Python package, you need to be able to install Python packages and run Python code in Jupyter notebooks on your computer. The quickest and easiest way to get started with Jupyter notebooks is by downloading and installing the JupyterLab Desktop (JLD) installer for your operating system from the official github repository.\n\n::: {.callout-note} The first time you start JupyterLab Desktop you additionally need to install the default Python environment from the start menu. To do so you need to hoover and click on the word ‘install’ on the bottom of the start up screen.\n:::\nFinally you can install or update (with the -U option) the falnama-dev package directly from this github repository. This is done by executing this command from a code cell in a Jupyter notebook:\n%pip install git+https://github.com/fligt/falnama-dev \nFor more information about Jupyterlab Desktop see the JLD user guide\nThat is it! You are now ready to explore the Falnama data together with us!",
+    "crumbs": [
+      "FUNCTIONS",
+      "Getting started with Python"
+    ]
+  },
+  {
+    "objectID": "functions/it-all-starts-with-fair-data.html",
+    "href": "functions/it-all-starts-with-fair-data.html",
+    "title": "It all starts with FAIR data",
+    "section": "",
+    "text": ":::(.callout-note} For now we have implemented access to our MA-XRF data only. Our intention is to expand functionality to other datasets in the near future. :::\nTo start working with the data import Falnama_maxrf_data.\n\nfrom falnama import Falnama_maxrf_data\n\nTo list which data filenames are included in this dataset, initialize and use the .show_registry_files().\n\nmaxrf_data = Falnama_maxrf_data()\nmaxrf_data.show_registry_files()\n\n['WM-71803-01_400_600_50.datastack',\n 'WM-71803-03_250_300_50.datastack',\n 'WM-71803-08_250_300_50.datastack',\n 'WM-71803-10_250_300_50.datastack',\n 'WM-71803-12_250_300_50.datastack',\n 'WM-71803-13_400_600_50.datastack',\n 'WM-71803-17_400_600_50.datastack',\n 'WM-71803-18_400_300_50_det.datastack',\n 'WM-71803-18_400_500_50.datastack',\n 'WM-71803-19_400_600_50.datastack',\n 'WM-71803-23_400_600_50.datastack',\n 'WM-71803-24_400_600_50.datastack',\n 'WM-71803-29_400_500_50.datastack',\n 'WM-71803-30_250_300_50.datastack',\n 'WM-71803-31_400_600_50.datastack',\n 'WM-71803-35_400_500_50.datastack']\n\n\nHi Koen, would be nice to implement fsspec based preview thumbnails here.\nNow it’s up to you to decide which files you want to download from our cloud storage. You can download individual files using the .download_file(file_name) method like so:\n\nmaxrf_data.download_file('WM-71803-01_400_600_50.datastack')\n\nFinished downloading\n\n\nOr download all the datastack files using the .download_all() method.\n\nmaxrf_data.download_all() # Warning: 62.8 GB!\n\nChecked 1/16 files\nChecked 2/16 files\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThe datastacks used for this project are quite big in size, totaling 62.8 GB. Make sure you have enough space on your device, since this download will take a while.\n\n\nAfter downloading all files you might be curious as to where they are stored. Normally they are all saved in the .cache folder within your JupyterLab/Hub files on your device. But if you want to know the exact location you can run the .get_base_path() method to see the exact location.\n\nmaxrf_data.get_base_path()\n\nPosixPath('/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks')\n\n\nFor easy accesibility of the datastack files which are used all across this package you can use downloader.get_datastack_files(). This returns a list of file locations which you can use in all of the code requiring datastacks.\n\ndatastack_files = maxrf_data.get_datastack_files()\ndatastack_files\n\n['/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-01_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-03_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-08_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-10_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-12_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-13_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-17_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_300_50_det.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-19_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-23_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-24_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-29_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-30_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-31_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-35_400_500_50.datastack']",
+    "crumbs": [
+      "FUNCTIONS",
+      "It all starts with FAIR data"
+    ]
+  },
+  {
+    "objectID": "functions/it-all-starts-with-fair-data.html#downloading-the-falnama-data",
+    "href": "functions/it-all-starts-with-fair-data.html#downloading-the-falnama-data",
+    "title": "It all starts with FAIR data",
+    "section": "",
+    "text": ":::(.callout-note} For now we have implemented access to our MA-XRF data only. Our intention is to expand functionality to other datasets in the near future. :::\nTo start working with the data import Falnama_maxrf_data.\n\nfrom falnama import Falnama_maxrf_data\n\nTo list which data filenames are included in this dataset, initialize and use the .show_registry_files().\n\nmaxrf_data = Falnama_maxrf_data()\nmaxrf_data.show_registry_files()\n\n['WM-71803-01_400_600_50.datastack',\n 'WM-71803-03_250_300_50.datastack',\n 'WM-71803-08_250_300_50.datastack',\n 'WM-71803-10_250_300_50.datastack',\n 'WM-71803-12_250_300_50.datastack',\n 'WM-71803-13_400_600_50.datastack',\n 'WM-71803-17_400_600_50.datastack',\n 'WM-71803-18_400_300_50_det.datastack',\n 'WM-71803-18_400_500_50.datastack',\n 'WM-71803-19_400_600_50.datastack',\n 'WM-71803-23_400_600_50.datastack',\n 'WM-71803-24_400_600_50.datastack',\n 'WM-71803-29_400_500_50.datastack',\n 'WM-71803-30_250_300_50.datastack',\n 'WM-71803-31_400_600_50.datastack',\n 'WM-71803-35_400_500_50.datastack']\n\n\nHi Koen, would be nice to implement fsspec based preview thumbnails here.\nNow it’s up to you to decide which files you want to download from our cloud storage. You can download individual files using the .download_file(file_name) method like so:\n\nmaxrf_data.download_file('WM-71803-01_400_600_50.datastack')\n\nFinished downloading\n\n\nOr download all the datastack files using the .download_all() method.\n\nmaxrf_data.download_all() # Warning: 62.8 GB!\n\nChecked 1/16 files\nChecked 2/16 files\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThe datastacks used for this project are quite big in size, totaling 62.8 GB. Make sure you have enough space on your device, since this download will take a while.\n\n\nAfter downloading all files you might be curious as to where they are stored. Normally they are all saved in the .cache folder within your JupyterLab/Hub files on your device. But if you want to know the exact location you can run the .get_base_path() method to see the exact location.\n\nmaxrf_data.get_base_path()\n\nPosixPath('/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks')\n\n\nFor easy accesibility of the datastack files which are used all across this package you can use downloader.get_datastack_files(). This returns a list of file locations which you can use in all of the code requiring datastacks.\n\ndatastack_files = maxrf_data.get_datastack_files()\ndatastack_files\n\n['/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-01_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-03_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-08_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-10_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-12_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-13_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-17_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_300_50_det.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-19_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-23_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-24_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-29_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-30_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-31_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-35_400_500_50.datastack']",
+    "crumbs": [
+      "FUNCTIONS",
+      "It all starts with FAIR data"
+    ]
+  },
+  {
+    "objectID": "functions/a-dashboard-for-exploring-our-maxrf-data.html",
+    "href": "functions/a-dashboard-for-exploring-our-maxrf-data.html",
+    "title": "A dashboard for exploring MA-XRF data",
+    "section": "",
+    "text": "Now that we have downloaded all MA-XRF data we can start to explore them by initializing the Falnama_maxrf_data() class. Which elements are present in the paints and other materials of pages that we scanned?\nfrom falnama import Falnama_maxrf_data\nimport maxrf4u as mx\nimport matplotlib.pyplot as plt\nmaxrf_data = Falnama_maxrf_data()\nOn my machine the data is already downloaded into the cache. In theory we should be able to efficiently check the file hashes with the .download_all() method. Unfortunately for these big files that reside on our network just calculating the hashes takes almost 10 minutes! So for now we simply skip this check and start working with the cached datastack files that contain our MA-XRF data.\ndatastack_files = maxrf_data.get_datastack_files()\ndatastack_files\n\n['/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-01_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-03_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-08_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-10_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-12_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-13_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-17_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_300_50_det.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-18_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-19_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-23_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-24_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-29_400_500_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-30_250_300_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-31_400_600_50.datastack',\n '/media/frank/lonprojecten/2024-811_falnama-project/data/interim/maxrf/datastacks/WM-71803-35_400_500_50.datastack']\nHere is a thumbnail overview plot of all the scanned areas.\nimvis_list = []\nextent_list = []\nfor datastack_file in datastack_files: \n    ds = mx.DataStack(datastack_file)\n    im = ds.read('imvis_reg')\n    extent = ds.read('imvis_extent')\n    imvis_list.append(im)\n    extent_list.append(extent)\nfig, axs = plt.subplots(ncols=8, nrows=2, figsize=[20, 10])\naxs = axs.flatten()\nfor i, [im, ax, extent] in enumerate(zip(imvis_list, axs, extent_list)): \n    ax.imshow(im, extent=extent)\n    ax.set_title(i)\nfrom falnama import Dashboard\nHere is a dashboard plot for our first datastack file.\ndash_0 = Dashboard(datastack_files[0])\ndash_0.add_roi(0, *dash_0.get_selection_coords())\nMm, for some reason the scaling of the roi image and spectra changes…",
+    "crumbs": [
+      "FUNCTIONS",
+      "A dashboard for exploring MA-XRF data"
+    ]
+  },
+  {
+    "objectID": "functions/a-dashboard-for-exploring-our-maxrf-data.html#functions",
+    "href": "functions/a-dashboard-for-exploring-our-maxrf-data.html#functions",
+    "title": "A dashboard for exploring MA-XRF data",
+    "section": "FUNCTIONS",
+    "text": "FUNCTIONS\n\nsource\n\nDashboard\n\n Dashboard (datastack_file=None, roi_count=4, data=None, eq_emap=False)\n\n*Create a dashboard for analyzing spectras on regions of interest\ndatastack_files: A list of datastack_file paths, does accept a singular string.\nroi_count: The amount of region of interest shown in the dashboard. Default is 10.*",
+    "crumbs": [
+      "FUNCTIONS",
+      "A dashboard for exploring MA-XRF data"
+    ]
+  },
+  {
+    "objectID": "gallery/exploring_the_spectra.html",
+    "href": "gallery/exploring_the_spectra.html",
+    "title": "Looking at our paint palette",
+    "section": "",
+    "text": "To be continued…….",
+    "crumbs": [
+      "Gallery",
+      "Looking at our paint palette"
+    ]
+  }
+]
