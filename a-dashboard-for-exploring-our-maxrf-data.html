@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>A dashboard for exploring MA-XRF data – falnama</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./file_table.html" rel="next">
+<link href="./how-to-make-sense-of-8118-files.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-000f0825b9c55ed21d14970d810c14a9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="A dashboard for exploring MA-XRF data – falnama">
+<meta property="og:description" content="Python package for exploration and visualization of datasets in the Falnama project">
+<meta property="og:image" content="https://fligt.github.io/falnama-dev/20_a-dashboard-for-exploring-our-maxrf-data_files/figure-html/cell-5-output-1.png">
+<meta property="og:site_name" content="falnama">
+<meta property="og:image:height" content="498">
+<meta property="og:image:width" content="1182">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">falnama</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fligt/falnama-dev"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./a-dashboard-for-exploring-our-maxrf-data.html">A dashboard for exploring MA-XRF data</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to the Falnama project</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./getting-started-with-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started with Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./how-to-make-sense-of-8118-files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to make sense of thousands of data files?</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./a-dashboard-for-exploring-our-maxrf-data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">A dashboard for exploring MA-XRF data</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#solving-the-sulfur-situation" id="toc-solving-the-sulfur-situation" class="nav-link active" data-scroll-target="#solving-the-sulfur-situation">Solving the sulfur situation</a>
+  <ul class="collapse">
+  <li><a href="#parse-datastack" id="toc-parse-datastack" class="nav-link" data-scroll-target="#parse-datastack">Parse datastack</a></li>
+  <li><a href="#regions-of-interest-and-their-elements" id="toc-regions-of-interest-and-their-elements" class="nav-link" data-scroll-target="#regions-of-interest-and-their-elements">Regions of interest and their elements</a></li>
+  <li><a href="#matplotlib-houtje-touwtje-dashboard" id="toc-matplotlib-houtje-touwtje-dashboard" class="nav-link" data-scroll-target="#matplotlib-houtje-touwtje-dashboard">Matplotlib houtje-touwtje dashboard</a></li>
+  <li><a href="#can-we-fit-a-lead-layer-thickness" id="toc-can-we-fit-a-lead-layer-thickness" class="nav-link" data-scroll-target="#can-we-fit-a-lead-layer-thickness">Can we fit a lead layer thickness?</a></li>
+  </ul></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">FUNCTIONS</a>
+  <ul class="collapse">
+  <li><a href="#plot_roi_dashboard" id="toc-plot_roi_dashboard" class="nav-link" data-scroll-target="#plot_roi_dashboard">plot_roi_dashboard</a></li>
+  <li><a href="#plot_roi_peak_patterns" id="toc-plot_roi_peak_patterns" class="nav-link" data-scroll-target="#plot_roi_peak_patterns">plot_roi_peak_patterns</a></li>
+  <li><a href="#get_roi_ims" id="toc-get_roi_ims" class="nav-link" data-scroll-target="#get_roi_ims">get_roi_ims</a></li>
+  <li><a href="#get_slice_map" id="toc-get_slice_map" class="nav-link" data-scroll-target="#get_slice_map">get_slice_map</a></li>
+  <li><a href="#pick_nmf_elementmap" id="toc-pick_nmf_elementmap" class="nav-link" data-scroll-target="#pick_nmf_elementmap">pick_nmf_elementmap</a></li>
+  <li><a href="#get_nmf_map" id="toc-get_nmf_map" class="nav-link" data-scroll-target="#get_nmf_map">get_nmf_map</a></li>
+  <li><a href="#plot_roi_maps" id="toc-plot_roi_maps" class="nav-link" data-scroll-target="#plot_roi_maps">plot_roi_maps</a></li>
+  <li><a href="#get_roi_maps" id="toc-get_roi_maps" class="nav-link" data-scroll-target="#get_roi_maps">get_roi_maps</a></li>
+  <li><a href="#plot_element_lines" id="toc-plot_element_lines" class="nav-link" data-scroll-target="#plot_element_lines">plot_element_lines</a></li>
+  <li><a href="#get_element_lines" id="toc-get_element_lines" class="nav-link" data-scroll-target="#get_element_lines">get_element_lines</a></li>
+  <li><a href="#plot_hotmax_spectra" id="toc-plot_hotmax_spectra" class="nav-link" data-scroll-target="#plot_hotmax_spectra">plot_hotmax_spectra</a></li>
+  <li><a href="#get_hotmax_spectra" id="toc-get_hotmax_spectra" class="nav-link" data-scroll-target="#get_hotmax_spectra">get_hotmax_spectra</a></li>
+  <li><a href="#plot_roi_peak_patterns-1" id="toc-plot_roi_peak_patterns-1" class="nav-link" data-scroll-target="#plot_roi_peak_patterns-1">plot_roi_peak_patterns</a></li>
+  <li><a href="#get_roi_slice_hotmax" id="toc-get_roi_slice_hotmax" class="nav-link" data-scroll-target="#get_roi_slice_hotmax">get_roi_slice_hotmax</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/fligt/falnama-dev/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A dashboard for exploring MA-XRF data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>Given our precomputed <code>.datastack</code> files present in our Nextcloud storage we can now visualize our MA-XRF data in a Dashboard viewer after downloading them once.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The total size of these 16 files is pretty big (56.5 GB) and downloading on my computer took about half an hour!</p>
+</div>
+</div>
+<div id="2bbe7feb-e4bf-467a-8ae0-5c1cfd0b2fcd" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:24:24.201967Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:24:24.201393Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:24:24.203974Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:24:24.203684Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:24:24.201955Z&quot;}}" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fairdatanow <span class="im">import</span> DataViewer</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Rectangle </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> moseley <span class="im">as</span> mos </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> maxrf4u <span class="im">as</span> mx</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> imageio <span class="im">as</span> iio</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> falnama <span class="im">import</span> get_roi_ims</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ba5cb7b2-df30-4231-892a-1dcb32040591">
+  <div id="e477491b-e1a8-4f99-9225-5ef7bafc2a37" data-root-id="ba5cb7b2-df30-4231-892a-1dcb32040591" style="display: contents;"></div>
+</div>
+<script type="application/javascript">(function(root) {
+  var docs_json = {"e01496f4-c124-4916-b817-206a00773871":{"version":"3.8.0","title":"Bokeh Application","config":{"type":"object","name":"DocumentConfig","id":"b44c76b0-d226-4f63-a362-bc264a445f1b","attributes":{"notifications":{"type":"object","name":"Notifications","id":"ec6686a5-30bf-4a16-85cf-c6ed250b6b33"}}},"roots":[{"type":"object","name":"panel.models.browser.BrowserInfo","id":"ba5cb7b2-df30-4231-892a-1dcb32040591"},{"type":"object","name":"panel.models.comm_manager.CommManager","id":"bdfa617b-4400-4e40-9411-0b1b4d346566","attributes":{"plot_id":"ba5cb7b2-df30-4231-892a-1dcb32040591","comm_id":"0ad9014d7cb148fd92f5f3eda5951149","client_comm_id":"9942aa7dc2a74937bcc7eb2054d3fc44"}}],"defs":[{"type":"model","name":"ReactiveHTML1"},{"type":"model","name":"FlexBox1","properties":[{"name":"align_content","kind":"Any","default":"flex-start"},{"name":"align_items","kind":"Any","default":"flex-start"},{"name":"flex_direction","kind":"Any","default":"row"},{"name":"flex_wrap","kind":"Any","default":"wrap"},{"name":"gap","kind":"Any","default":""},{"name":"justify_content","kind":"Any","default":"flex-start"}]},{"type":"model","name":"FloatPanel1","properties":[{"name":"config","kind":"Any","default":{"type":"map"}},{"name":"contained","kind":"Any","default":true},{"name":"position","kind":"Any","default":"right-top"},{"name":"offsetx","kind":"Any","default":null},{"name":"offsety","kind":"Any","default":null},{"name":"theme","kind":"Any","default":"primary"},{"name":"status","kind":"Any","default":"normalized"}]},{"type":"model","name":"GridStack1","properties":[{"name":"ncols","kind":"Any","default":null},{"name":"nrows","kind":"Any","default":null},{"name":"allow_resize","kind":"Any","default":true},{"name":"allow_drag","kind":"Any","default":true},{"name":"state","kind":"Any","default":[]}]},{"type":"model","name":"drag1","properties":[{"name":"slider_width","kind":"Any","default":5},{"name":"slider_color","kind":"Any","default":"black"},{"name":"start","kind":"Any","default":0},{"name":"end","kind":"Any","default":100},{"name":"value","kind":"Any","default":50}]},{"type":"model","name":"click1","properties":[{"name":"terminal_output","kind":"Any","default":""},{"name":"debug_name","kind":"Any","default":""},{"name":"clears","kind":"Any","default":0}]},{"type":"model","name":"ReactiveESM1","properties":[{"name":"esm_constants","kind":"Any","default":{"type":"map"}}]},{"type":"model","name":"JSComponent1","properties":[{"name":"esm_constants","kind":"Any","default":{"type":"map"}}]},{"type":"model","name":"ReactComponent1","properties":[{"name":"use_shadow_dom","kind":"Any","default":true},{"name":"esm_constants","kind":"Any","default":{"type":"map"}}]},{"type":"model","name":"AnyWidgetComponent1","properties":[{"name":"use_shadow_dom","kind":"Any","default":true},{"name":"esm_constants","kind":"Any","default":{"type":"map"}}]},{"type":"model","name":"FastWrapper1","properties":[{"name":"object","kind":"Any","default":null},{"name":"style","kind":"Any","default":null}]},{"type":"model","name":"NotificationArea1","properties":[{"name":"js_events","kind":"Any","default":{"type":"map"}},{"name":"max_notifications","kind":"Any","default":5},{"name":"notifications","kind":"Any","default":[]},{"name":"position","kind":"Any","default":"bottom-right"},{"name":"_clear","kind":"Any","default":0},{"name":"types","kind":"Any","default":[{"type":"map","entries":[["type","warning"],["background","#ffc107"],["icon",{"type":"map","entries":[["className","fas fa-exclamation-triangle"],["tagName","i"],["color","white"]]}]]},{"type":"map","entries":[["type","info"],["background","#007bff"],["icon",{"type":"map","entries":[["className","fas fa-info-circle"],["tagName","i"],["color","white"]]}]]}]}]},{"type":"model","name":"Notification","properties":[{"name":"background","kind":"Any","default":null},{"name":"duration","kind":"Any","default":3000},{"name":"icon","kind":"Any","default":null},{"name":"message","kind":"Any","default":""},{"name":"notification_type","kind":"Any","default":null},{"name":"_rendered","kind":"Any","default":false},{"name":"_destroyed","kind":"Any","default":false}]},{"type":"model","name":"TemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"BootstrapTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"TemplateEditor1","properties":[{"name":"layout","kind":"Any","default":[]}]},{"type":"model","name":"MaterialTemplateActions1","properties":[{"name":"open_modal","kind":"Any","default":0},{"name":"close_modal","kind":"Any","default":0}]},{"type":"model","name":"request_value1","properties":[{"name":"fill","kind":"Any","default":"none"},{"name":"_synced","kind":"Any","default":null},{"name":"_request_sync","kind":"Any","default":0}]}]}};
+  var render_items = [{"docid":"e01496f4-c124-4916-b817-206a00773871","roots":{"ba5cb7b2-df30-4231-892a-1dcb32040591":"e477491b-e1a8-4f99-9225-5ef7bafc2a37"},"root_ids":["ba5cb7b2-df30-4231-892a-1dcb32040591"]}];
+  var docs = Object.values(docs_json)
+  if (!docs) {
+    return
+  }
+  const py_version = docs[0].version.replace('rc', '-rc.').replace('.dev', '-dev.')
+  async function embed_document(root) {
+    var Bokeh = get_bokeh(root)
+    await Bokeh.embed.embed_items_notebook(docs_json, render_items);
+    for (const render_item of render_items) {
+      for (const root_id of render_item.root_ids) {
+    const id_el = document.getElementById(root_id)
+    if (id_el.children.length && id_el.children[0].hasAttribute('data-root-id')) {
+      const root_el = id_el.children[0]
+      root_el.id = root_el.id + '-rendered'
+      for (const child of root_el.children) {
+            // Ensure JupyterLab does not capture keyboard shortcuts
+            // see: https://jupyterlab.readthedocs.io/en/4.1.x/extension/notebook.html#keyboard-interaction-model
+        child.setAttribute('data-lm-suppress-shortcuts', 'true')
+      }
+    }
+      }
+    }
+  }
+  function get_bokeh(root) {
+    if (root.Bokeh === undefined) {
+      return null
+    } else if (root.Bokeh.version !== py_version) {
+      if (root.Bokeh.versions === undefined || !root.Bokeh.versions.has(py_version)) {
+    return null
+      }
+      return root.Bokeh.versions.get(py_version);
+    } else if (root.Bokeh.version === py_version) {
+      return root.Bokeh
+    }
+    return null
+  }
+  function is_loaded(root) {
+    var Bokeh = get_bokeh(root)
+    return (Bokeh != null && Bokeh.Panel !== undefined && ( root.Tabulator !== undefined) && ( root.Tabulator !== undefined))
+  }
+  if (is_loaded(root)) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (is_loaded(root)) {
+        clearInterval(timer);
+        embed_document(root);
+      } else if (document.readyState == "complete") {
+        attempts++;
+        if (attempts > 200) {
+          clearInterval(timer);
+      var Bokeh = get_bokeh(root)
+      if (Bokeh == null || Bokeh.Panel == null) {
+            console.warn("Panel: ERROR: Unable to run Panel code because Bokeh or Panel library is missing");
+      } else {
+        console.warn("Panel: WARNING: Attempting to render but not all required libraries could be resolved.")
+        embed_document(root)
+      }
+        }
+      }
+    }, 25, root)
+  }
+})(window);</script>
+</div>
+</div>
+<div id="47ab2798-7f79-42f8-a007-6f95370f1103" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:00.865096Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:00.864624Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:00.868097Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:00.867569Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:00.865073Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>configuration <span class="op">=</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'url'</span>: <span class="st">"https://laboppad.nl/falnama-project"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'user'</span>:    os.getenv(<span class="st">'NC_AUTH_USER'</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'password'</span>: os.getenv(<span class="st">'NC_AUTH_PASS'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="ee89f575-4b5f-45c7-883a-696260dc05c3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:02.065949Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:02.065516Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:17.939475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:17.939024Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:02.065928Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>filters <span class="op">=</span> {<span class="st">'extensions'</span>: [<span class="st">'.datastack'</span>]} </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dv <span class="op">=</span> DataViewer(configuration, <span class="op">**</span>filters)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>datastack_files <span class="op">=</span> dv.download_filtered()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ready with downloading 16 selected remote files to local cache: /home/frank/.cache/fairdatanow                                                                      </code></pre>
+</div>
+</div>
+<p>Ok, let’s start our exploration by plotting a thumbnail overview of all scanned areas.</p>
+<div id="d0ff1310-bd37-4eb6-a9ef-faf14abb0c09" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:24.066192Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:24.065638Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:26.777040Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:26.776387Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:24.066180Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>imvis_list <span class="op">=</span> []</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>extent_list <span class="op">=</span> []</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> datastack_file <span class="kw">in</span> datastack_files: </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ds <span class="op">=</span> mx.DataStack(datastack_file)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ds.read(<span class="st">'imvis_reg'</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    extent <span class="op">=</span> ds.read(<span class="st">'imvis_extent'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    imvis_list.append(im)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    extent_list.append(extent)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>object_nums <span class="op">=</span> [re.sub(<span class="vs">r'</span><span class="dv">.</span><span class="op">*</span><span class="kw">(</span><span class="vs">WM-71803-</span><span class="dv">\d\d</span><span class="kw">)</span><span class="dv">.</span><span class="op">*</span><span class="vs">'</span>, <span class="vs">r'</span><span class="ch">\1</span><span class="vs">'</span>, dsf) <span class="cf">for</span> dsf <span class="kw">in</span> datastack_files]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">8</span>, nrows<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>[<span class="dv">15</span>, <span class="dv">6</span>])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> axs.flatten()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, [im, ax, extent] <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(imvis_list, axs, extent_list)): </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    ax.imshow(im, extent<span class="op">=</span>extent)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'[</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">] </span><span class="sc">{</span>object_nums[i]<span class="sc">}</span><span class="ss">'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    ax.axis(<span class="st">'off'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="20_a-dashboard-for-exploring-our-maxrf-data_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="solving-the-sulfur-situation" class="level2">
+<h2 class="anchored" data-anchor-id="solving-the-sulfur-situation">Solving the sulfur situation</h2>
+<p>It came as a shock to me today that my two sulfur maps (i.e.&nbsp;a slice map and an NMF map) <strong>both are worse than the Bruker map</strong>.</p>
+<div id="4d5b625e-4eda-4cb9-89bd-d9c48aad465a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:41.638680Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:41.638127Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:41.698777Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:41.698250Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:41.638662Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filters <span class="op">=</span> {<span class="st">'search'</span>: <span class="st">'.*Results/04.*71803-35_S.tif'</span>, <span class="st">'use_regex'</span>: <span class="va">True</span>}   </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dv <span class="op">=</span> DataViewer(configuration, <span class="op">**</span>filters)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>bruker_sulfur_tif <span class="op">=</span> dv.download_filtered()[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ready with downloading 1 selected remote files to local cache: /home/frank/.cache/fairdatanow                                                                      </code></pre>
+</div>
+</div>
+<div id="7d64eaf8-1a97-4094-9d8b-937a981245aa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:43.569355Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:43.568919Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:43.667800Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:43.667255Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:43.569344Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bruker_S_map <span class="op">=</span> plt.imread(bruker_sulfur_tif)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cb3897b6-48f9-4daa-9609-51a0b95b4b88" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:20:44.514506Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:20:44.513894Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:20:44.654503Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:20:44.653993Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:20:44.514485Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ax.imshow(bruker_S_map)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Bruker S map'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="20_a-dashboard-for-exploring-our-maxrf-data_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="parse-datastack" class="level3">
+<h3 class="anchored" data-anchor-id="parse-datastack">Parse datastack</h3>
+<p>A first step now is to read relevant datasets from the datastack file and manually select regions of interest for page 35 (index 15)…</p>
+<div id="cfee2fdf-0a46-40de-a3cc-277e94538366" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:22:21.480442Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:22:21.480043Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:22:38.292312Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:22:38.291806Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:22:21.480428Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>datastack_file <span class="op">=</span> datastack_files[n]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> mx.DataStack(datastack_file)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>object_num <span class="op">=</span> object_nums[n]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>cube <span class="op">=</span> ds.read(<span class="st">'maxrf_cube'</span>, compute<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>imvis_highres <span class="op">=</span> ds.read(<span class="st">'imvis_reg_highres'</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>imvis <span class="op">=</span> ds.read(<span class="st">'imvis_reg'</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>extent <span class="op">=</span> ds.read(<span class="st">'imvis_extent'</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>x_keVs <span class="op">=</span> ds.read(<span class="st">'maxrf_energies'</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>y_maxspectrum <span class="op">=</span> ds.read(<span class="st">'maxrf_maxspectrum'</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>nmf_elementmaps <span class="op">=</span> ds.read(<span class="st">'nmf_elementmaps'</span>) </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#ppa = mx.Peak_Pattern_Atlas(datastack_file=datastack_file, tube_keV=23)</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>ppa <span class="op">=</span> mos.PeakPatternAtlas(x_keVs<span class="op">=</span>x_keVs) </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>ds.tree()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ready building Peak Pattern Atlas!                                                                   </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">/</span>
+├── <span style="font-weight: bold">compton_peak_energy</span> (1,) float64
+├── <span style="font-weight: bold">hotmax_baselines</span> (31, 4096) float64
+├── <span style="font-weight: bold">hotmax_noiselines</span> (31, 4096) float64
+├── <span style="font-weight: bold">hotmax_peak_idxs_flat</span> (34,) int64
+├── <span style="font-weight: bold">hotmax_peak_idxs_list</span> (31, 2) int64
+├── <span style="font-weight: bold">hotmax_spectra</span> (31, 4096) float32
+├── <span style="font-weight: bold">hotmax_spots</span> (31, 2) int64
+├── <span style="font-weight: bold">hotmax_subpeak_idxs_list</span> (31, 18) int64
+├── <span style="font-weight: bold">imvis_extent</span> (4,) int64
+├── <span style="font-weight: bold">imvis_reg</span> (617, 357, 3) uint8
+├── <span style="font-weight: bold">imvis_reg_highres</span> (8256, 4777, 3) uint8
+├── <span style="font-weight: bold">maxrf_cube</span> (617, 357, 4096) float32
+├── <span style="font-weight: bold">maxrf_energies</span> (4096,) float64
+├── <span style="font-weight: bold">maxrf_maxspectrum</span> (4096,) float32
+├── <span style="font-weight: bold">maxrf_sumspectrum</span> (4096,) float64
+├── <span style="font-weight: bold">nmf_atomnums</span> (18,) int64
+├── <span style="font-weight: bold">nmf_elementmaps</span> (18, 617, 357) float32
+├── <span style="font-weight: bold">nmf_gausscomponents</span> (35, 4096) float32
+├── <span style="font-weight: bold">nmf_peakmaps</span> (35, 617, 357) float32
+└── <span style="font-weight: bold">nmf_peaks2elements_matrix</span> (18, 34) float32
+</pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>/home/frank/.cache/fairdatanow/falnama-project/OPENDATA/maxrf/datastacks/WM-71803-35_400_500_50.datastack:
+
+</code></pre>
+</div>
+</div>
+<div id="fd18bcf3-dec1-42f4-aa81-d29690d82fc4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-20T11:53:32.294874Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-20T11:53:32.294641Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-20T11:53:32.297205Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-20T11:53:32.296741Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-20T11:53:32.294864Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># broken... </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mx.get_instrument_pattern(datastack_file)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="regions-of-interest-and-their-elements" class="level3">
+<h3 class="anchored" data-anchor-id="regions-of-interest-and-their-elements">Regions of interest and their elements</h3>
+<p>fig, axs = plt.subplots(ncols=5, nrows=2, figsize=[20, 15]) axs = axs.flatten() for ax in axs: ax.imshow(imvis_highres, extent=extent)</p>
+<p>xylims_list = [[int(ax.get_xlim()[0]), int(ax.get_xlim()[1]), int(ax.get_ylim()[0]), int(ax.get_ylim()[1])] for ax in axs]</p>
+<div id="22a5b0ad-c2d7-40a3-87a3-45f3c22f89fa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:22:50.842747Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:22:50.842472Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:22:51.108914Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:22:51.108526Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:22:50.842724Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>xylims_list <span class="op">=</span> [[<span class="dv">29</span>, <span class="dv">51</span>, <span class="dv">106</span>, <span class="dv">84</span>], [<span class="dv">39</span>, <span class="dv">88</span>, <span class="dv">136</span>, <span class="dv">91</span>], [<span class="dv">154</span>, <span class="dv">183</span>, <span class="dv">242</span>, <span class="dv">208</span>], [<span class="dv">275</span>, <span class="dv">296</span>, <span class="dv">249</span>, <span class="dv">227</span>], [<span class="dv">40</span>, <span class="dv">59</span>, <span class="dv">289</span>, <span class="dv">269</span>],</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>               [<span class="dv">72</span>, <span class="dv">124</span>, <span class="dv">441</span>, <span class="dv">397</span>], [<span class="dv">146</span>, <span class="dv">168</span>, <span class="dv">462</span>, <span class="dv">443</span>], [<span class="dv">139</span>, <span class="dv">161</span>, <span class="dv">393</span>, <span class="dv">370</span>], [<span class="dv">245</span>, <span class="dv">268</span>, <span class="dv">454</span>, <span class="dv">433</span>], [<span class="dv">197</span>, <span class="dv">219</span>, <span class="dv">300</span>, <span class="dv">278</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>roi_ims <span class="op">=</span> get_roi_ims(datastack_file, xylims_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="eb6ef9cf-c535-4bd8-af79-1a54931fadd2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:24:30.192457Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:24:30.192031Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:24:30.942426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:24:30.942086Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:24:30.192435Z&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="bu">len</span>(roi_ims)<span class="op">+</span><span class="dv">1</span>, figsize<span class="op">=</span>[<span class="dv">20</span>, <span class="dv">4</span>], squeeze<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>edgecolors <span class="op">=</span> [<span class="st">'violet'</span>, <span class="st">'cyan'</span>, <span class="st">'blue'</span>, <span class="st">'red'</span>, <span class="st">'white'</span>, <span class="st">'orange'</span>, <span class="st">'brown'</span>, <span class="st">'green'</span>, <span class="st">'maroon'</span>, <span class="st">'black'</span>]</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].imshow(imvis_highres, extent<span class="op">=</span>extent)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, xylims <span class="kw">in</span> <span class="bu">enumerate</span>(xylims_list):</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    x0, x1, y0, y1 <span class="op">=</span> xylims</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    axs[<span class="dv">0</span>].add_patch(Rectangle([x0, y1], x1 <span class="op">-</span>x0, y0 <span class="op">-</span> y1, linewidth<span class="op">=</span><span class="dv">1</span>, edgecolor<span class="op">=</span>edgecolors[i], facecolor<span class="op">=</span><span class="st">'none'</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, [ax, im] <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(axs[<span class="dv">1</span>:], roi_ims)): </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    ax.imshow(im)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'[</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">] </span><span class="sc">{</span>edgecolors[i]<span class="sc">}</span><span class="ss">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"7b5925e15de64d059d449d19d0745931","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+</section>
+<section id="matplotlib-houtje-touwtje-dashboard" class="level3">
+<h3 class="anchored" data-anchor-id="matplotlib-houtje-touwtje-dashboard">Matplotlib houtje-touwtje dashboard</h3>
+<p>Here is the latest still very rough code for an ROI tabs dashboard.</p>
+<div id="6523af45-124e-4bac-8cfb-e52c728e615e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-01T13:56:06.906112Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-01T13:56:06.905653Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-01T13:56:06.912487Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-01T13:56:06.911980Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-01T13:56:06.906089Z&quot;}}" data-execution_count="95">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.close(<span class="st">'all'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Ok, we now need some pretty advanced ROI hotmax functionality. Ehm, let’s build that here from scratch…</p>
+<div id="5164afa2-7f6c-4e32-8574-8dadda5c7b89" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:25:05.353913Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:25:05.353389Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:25:05.356734Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:25:05.356147Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:25:05.353891Z&quot;}}" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> falnama <span class="im">as</span> fn</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="bf540b72-727e-4774-a75d-d9bb35c9f71a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:25:32.676663Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:25:32.676404Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:25:39.908264Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:25:39.907688Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:25:32.676643Z&quot;}}" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">###### BUILD DASHBOARD FIGURES CANVAS ################### r</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>roi_elements_list <span class="op">=</span> [[<span class="st">'Pb'</span>, <span class="st">'K'</span>, <span class="st">'Ca'</span>, <span class="st">'Fe'</span>], <span class="co">#0 We see clear peaks for K and Ca in the spectrum and slice maps why is Ca not showing clearly in the Ca (NMF) map?</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb_1'</span>, <span class="st">'K'</span>, <span class="st">'Ca'</span>, <span class="st">'As_1'</span>, <span class="st">'S'</span>], <span class="co">#1</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>, <span class="st">'Fe'</span>, <span class="st">'Ca'</span>, <span class="st">'Hg'</span>], <span class="co">#2</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>, <span class="st">'Pb_1'</span>, <span class="st">'S'</span>], <span class="co">#3</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>, <span class="st">'Fe'</span>, <span class="st">'Ca'</span>], <span class="co">#4</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>, <span class="st">'As'</span>, <span class="st">'S'</span>, <span class="st">'Fe'</span>], <span class="co">#5 Here we see that the NMF maps are more clear the the alpha slices</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Au'</span>, <span class="st">'Pb'</span>, <span class="st">'As'</span>], <span class="co">#6 Clearly gold on red lead. The Pb alpha slice map is confusing, no Hg present in the Au  </span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>, <span class="st">'As'</span>, <span class="st">'S'</span>, <span class="st">'Au'</span>], <span class="co">#7 The yellow robe is clearly orpiment. Here again the the overlapping Pb alpha with As is confusing </span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'As'</span>, <span class="st">'S'</span>, <span class="st">'Au'</span>, <span class="st">'Pb'</span>], <span class="co">#8 According to the NMF map there should be no lead present in the green robe </span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                     [<span class="st">'Pb'</span>]] <span class="co">#9</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>roi_cubes <span class="op">=</span> [cube[l:k, i:j].compute() <span class="cf">for</span> i, j, k, l <span class="kw">in</span> xylims_list] </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>roi_ims <span class="op">=</span> get_roi_ims(datastack_file, xylims_list)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="5a0c21c1-9020-43e5-a348-84cc7dfe72d2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:29:20.454913Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:29:20.454472Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:29:41.810856Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:29:41.810210Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:29:20.454892Z&quot;}}" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>roi_n <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ncols <span class="op">=</span> <span class="bu">len</span>(roi_elements_list[roi_n])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>hspace <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>wspace <span class="op">=</span> <span class="fl">0.02</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>xylims <span class="op">=</span> xylims_list[roi_n]</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>l, r, b, t <span class="op">=</span> xylims </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> r <span class="op">-</span> l </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> b <span class="op">-</span> t </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>roi_extent <span class="op">=</span> [<span class="dv">0</span>, w, h, <span class="dv">0</span>]</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(layout<span class="op">=</span><span class="st">'constrained'</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>))</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>topfigs, midfig, botfig <span class="op">=</span> fig.subfigures(nrows<span class="op">=</span><span class="dv">3</span>, hspace<span class="op">=</span>hspace, height_ratios<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>], squeeze<span class="op">=</span><span class="va">True</span>) </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>topleftfig, topmidfig, toprightfig <span class="op">=</span> topfigs.subfigures(ncols<span class="op">=</span><span class="dv">3</span>, wspace<span class="op">=</span>wspace, width_ratios<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>], squeeze<span class="op">=</span><span class="va">True</span>) </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>ax_00 <span class="op">=</span> topleftfig.subplots()</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>ax_01 <span class="op">=</span> topmidfig.subplots()</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>ax_020, ax_021 <span class="op">=</span> toprightfig.subplots(nrows<span class="op">=</span><span class="dv">2</span>, squeeze<span class="op">=</span><span class="va">True</span>, sharex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>spectra_axs <span class="op">=</span> midfig.subplots(ncols<span class="op">=</span>ncols, squeeze<span class="op">=</span><span class="va">True</span>, sharex<span class="op">=</span><span class="va">True</span>) <span class="co">#, sharey=True) </span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>maps_axs <span class="op">=</span> botfig.subplots(nrows<span class="op">=</span><span class="dv">2</span>, ncols<span class="op">=</span>ncols, sharex<span class="op">=</span><span class="va">True</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">########## TOP #################</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="co"># RGB overview and RGB ROI </span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>ax_00.imshow(imvis_highres, extent<span class="op">=</span>extent)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, xylims <span class="kw">in</span> <span class="bu">enumerate</span>(xylims_list):</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    x0, x1, y0, y1 <span class="op">=</span> xylims</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    ax_00.add_patch(Rectangle([x0, y1], x1 <span class="op">-</span>x0, y0 <span class="op">-</span> y1, linewidth<span class="op">=</span><span class="dv">1</span>, edgecolor<span class="op">=</span>edgecolors[i], facecolor<span class="op">=</span><span class="st">'none'</span>))</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    ax_00.annotate(<span class="ss">f'ROI </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">'</span>, xy<span class="op">=</span>[x0, y1], xytext<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">5</span>], textcoords<span class="op">=</span><span class="st">'offset points'</span>, color<span class="op">=</span><span class="st">'w'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>ax_00.set_title(object_num)</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>ax_01.imshow(roi_ims[roi_n], extent<span class="op">=</span>roi_extent) </span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>ax_01.set_title(<span class="ss">f'ROI </span><span class="sc">{</span>roi_n<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="co"># ROI spectral plots and peek pattern atlas </span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="co"># compute roi cube (core) maxspectrum </span></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>hotmax_idxs, spectra <span class="op">=</span> get_hotmax_spectra(roi_cubes[roi_n])</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>roi_cube <span class="op">=</span> roi_cubes[roi_n]</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>roi_h, roi_w, roi_d <span class="op">=</span> roi_cube.shape</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>roi_flat <span class="op">=</span> roi_cube.reshape([<span class="op">-</span><span class="dv">1</span>, roi_d])</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>roi_maxspectrum <span class="op">=</span> roi_flat.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>) <span class="co"># actually this is the roi core max spectrum  </span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>roi_elements <span class="op">=</span> roi_elements_list[roi_n]</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>ax_020.plot(x_keVs, roi_maxspectrum, label<span class="op">=</span><span class="st">'ROI maxspectrum'</span>)</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>ax_020.plot(x_keVs, y_maxspectrum, color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.2</span>, label<span class="op">=</span><span class="st">'full page maxspectrum'</span>)</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>ax_020.set_xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">25</span>])</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>ax_021.set_xlabel(<span class="st">'energy [keV]'</span>)</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="co">#ax_020.legend() # need to fix blocking of view </span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a><span class="co"># plot peak pattern atlas </span></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a>select_elems <span class="op">=</span> roi_elements_list[roi_n]</span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a>select_elems <span class="op">=</span> [re.sub(<span class="st">'_.*'</span>, <span class="st">''</span>, elem) <span class="cf">for</span> elem <span class="kw">in</span> select_elems]</span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>ppa.plot_atlas(ax<span class="op">=</span>ax_021)</span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, element <span class="kw">in</span> <span class="bu">enumerate</span>(roi_elements): </span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># based on element now compute element slice map and related hotmax properties </span></span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>    slice_map, slice_idx <span class="op">=</span> get_slice_map(datastack_file, element)</span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a>    hx, hy, roi_x, roi_y, hotmax_spectrum <span class="op">=</span> get_roi_slice_hotmax(datastack_file, slice_idx, xylims_list[roi_n]) </span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add hotmax locations to TOP image plots </span></span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a>    ax_01.scatter(roi_x, roi_y)</span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add slice line to spectral plots </span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a>    <span class="co">#spectra_axs[i].axvline(x_keVs[slice_idx], color='r')</span></span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add hotmax locations to slice maps </span></span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">0</span>, i].scatter(hx, hy, color<span class="op">=</span><span class="st">'w'</span>, marker<span class="op">=</span><span class="st">'+'</span>)</span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add hotmax spectra and element shadows to mid figure</span></span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>    spectra_axs[i].plot(x_keVs, hotmax_spectrum)</span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a>    spectra_axs[i].scatter(x_keVs[slice_idx], hotmax_spectrum[slice_idx], marker<span class="op">=</span><span class="st">'s'</span>, edgecolor<span class="op">=</span><span class="st">'r'</span>, facecolor<span class="op">=</span><span class="st">'none'</span>)</span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot_element_shadow(element, x_keVs, flip=1, ax=spectra_axs[i], y=hotmax_spectrum)</span></span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>    spectra_axs[i].plot(x_keVs, y_maxspectrum, color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.15</span>)</span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>    spectra_axs[i].set_xlim([<span class="op">-</span><span class="dv">1</span>, <span class="dv">25</span>])</span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>    spectra_axs[i].set_title(<span class="ss">f'</span><span class="sc">{</span>element<span class="sc">}</span><span class="ss"> (slice </span><span class="sc">{</span>x_keVs[slice_idx]<span class="sc">:.1f}</span><span class="ss"> keV)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a>    plot_element_lines(element, x_keVs, ax<span class="op">=</span>spectra_axs[i], color<span class="op">=</span><span class="st">'r'</span>, y<span class="op">=</span>hotmax_spectrum)</span>
+<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add NMF map for element </span></span>
+<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>    nmf_map <span class="op">=</span>  pick_nmf_elementmap(datastack_file, nmf_elementmaps, element) </span>
+<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">0</span>, i].imshow(slice_map)</span>
+<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">0</span>, i].set_title(<span class="ss">f'</span><span class="sc">{</span>element<span class="sc">}</span><span class="ss"> (slice </span><span class="sc">{</span>x_keVs[slice_idx]<span class="sc">:.1f}</span><span class="ss"> keV)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">1</span>, i].imshow(nmf_map)</span>
+<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">1</span>, i].set_title(<span class="ss">f'</span><span class="sc">{</span>element<span class="sc">}</span><span class="ss"> (NMF)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add ROI rectangle </span></span>
+<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a>    x0, x1, y0, y1  <span class="op">=</span> xylims_list[roi_n]</span>
+<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">0</span>, i].add_patch(Rectangle([x0, y1], x1 <span class="op">-</span>x0, y0 <span class="op">-</span> y1, linewidth<span class="op">=</span><span class="dv">1</span>, edgecolor<span class="op">=</span>edgecolors[roi_n], facecolor<span class="op">=</span><span class="st">'none'</span>))</span>
+<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">0</span>, i].annotate(<span class="ss">f'ROI </span><span class="sc">{</span>roi_n<span class="sc">}</span><span class="ss">'</span>, xy<span class="op">=</span>[x0, y1], xytext<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">5</span>], textcoords<span class="op">=</span><span class="st">'offset points'</span>, color<span class="op">=</span><span class="st">'w'</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">1</span>, i].add_patch(Rectangle([x0, y1], x1 <span class="op">-</span>x0, y0 <span class="op">-</span> y1, linewidth<span class="op">=</span><span class="dv">1</span>, edgecolor<span class="op">=</span>edgecolors[roi_n], facecolor<span class="op">=</span><span class="st">'none'</span>))</span>
+<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a>    maps_axs[<span class="dv">1</span>, i].annotate(<span class="ss">f'ROI </span><span class="sc">{</span>roi_n<span class="sc">}</span><span class="ss">'</span>, xy<span class="op">=</span>[x0, y1], xytext<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">5</span>], textcoords<span class="op">=</span><span class="st">'offset points'</span>, color<span class="op">=</span><span class="st">'w'</span>, fontsize<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"99cf7566e9a1455a9c1fed7ccec7e84e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+</section>
+<section id="can-we-fit-a-lead-layer-thickness" class="level3">
+<h3 class="anchored" data-anchor-id="can-we-fit-a-lead-layer-thickness">Can we fit a lead layer thickness?</h3>
+<p>Ok, Let’s extract a global hotmax spectrum for <code>Pb_1</code></p>
+<div id="a3b7334a-fc7b-4ccc-a54e-4b91823ba834" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T14:33:01.607220Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T14:33:01.606939Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T14:33:03.064143Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T14:33:03.063538Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T14:33:01.607199Z&quot;}}" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Pb_slice_map, Pb_slice_idx <span class="op">=</span> get_slice_map(datastack_file, <span class="st">'Pb_1'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>yi, xi <span class="op">=</span> np.argwhere(Pb_slice_map <span class="op">==</span> Pb_slice_map.<span class="bu">max</span>())[<span class="dv">0</span>] </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>Pb_hotmax <span class="op">=</span> cube[yi, xi, :].compute()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="edb92bf1-9942-4e43-988c-b10df81d1450" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-24T08:45:53.817722Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-24T08:45:53.817253Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-24T08:45:54.145307Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-24T08:45:54.144547Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-24T08:45:53.817695Z&quot;}}" data-execution_count="67">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>[<span class="dv">15</span>, <span class="dv">10</span>], width_ratios<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">3</span>])</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ax0, ax1 <span class="op">=</span> axs.flatten()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>ax0.imshow(Pb_slice_map)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ax0.scatter(xi, yi, color<span class="op">=</span><span class="st">'w'</span>, marker<span class="op">=</span><span class="st">'+'</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>ax0.set_title(<span class="st">'Pb_1'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax1.fill_between(x_keVs, Pb_hotmax <span class="op">/</span> Pb_hotmax.<span class="bu">max</span>(), color<span class="op">=</span><span class="st">'r'</span>, label<span class="op">=</span><span class="st">'Pb hotmax'</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>h_list <span class="op">=</span> [<span class="fl">0.0001</span>, <span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>] </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> cm.viridis(np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="bu">len</span>(h_list)))</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, h_mm <span class="kw">in</span> <span class="bu">enumerate</span>(h_list): </span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    Pb_xrf <span class="op">=</span> mos.ElementXRF(<span class="st">'Pb'</span>, h_mm<span class="op">=</span>h_mm, excitation_energy_keV<span class="op">=</span><span class="dv">30</span>, x_keVs<span class="op">=</span>x_keVs, std<span class="op">=</span><span class="fl">0.02</span>)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    Pb_x, Pb_y <span class="op">=</span> Pb_xrf.spectrum_xy</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    ax1.plot(Pb_x, <span class="dv">100</span><span class="op">*</span>Pb_y, color<span class="op">=</span>colors[i], label<span class="op">=</span><span class="ss">f'Pb (</span><span class="sc">{</span>h_mm<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    ax1.legend()</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    ax1.set_xlim([<span class="dv">0</span>, <span class="dv">18</span>])<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"f4480f3bae8d452dba3471704c9e5ec7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+<p>I need to have access to the peak indexes…</p>
+<div id="5480edc1-ccc6-47ef-932e-b79ff82bb510" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2025-10-23T15:19:38.910981Z&quot;,&quot;iopub.status.busy&quot;:&quot;2025-10-23T15:19:38.910204Z&quot;,&quot;iopub.status.idle&quot;:&quot;2025-10-23T15:19:39.722664Z&quot;,&quot;shell.execute_reply&quot;:&quot;2025-10-23T15:19:39.722156Z&quot;,&quot;shell.execute_reply.started&quot;:&quot;2025-10-23T15:19:38.910950Z&quot;}}" data-execution_count="65">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Pb_xrf.get_pattern_dict()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
+<pre><code>{'elem': 'Pb',
+ 'atomic_number': 82,
+ 'alpha_keV': 12.609790734147028,
+ 'name': 'Lead',
+ 'peaks_xy': array([[1.26097907e+01, 3.57595202e-02],
+        [1.05442700e+01, 3.31442037e-02],
+        [1.47655527e+01, 3.64028035e-03],
+        [1.51666247e+01, 1.29834767e-03],
+        [9.18062517e+00, 1.29593281e-03],
+        [2.37242804e+00, 5.87008945e-04],
+        [1.13464139e+01, 4.67320502e-04]]),
+ 'alpha_escape_keV': 10.869790734147028}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">FUNCTIONS</h2>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L337" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="plot_roi_dashboard" class="level3">
+<h3 class="anchored" data-anchor-id="plot_roi_dashboard">plot_roi_dashboard</h3>
+<blockquote class="blockquote">
+<pre><code> plot_roi_dashboard (datastack_file, xylims_list, roi_elements_list)</code></pre>
+</blockquote>
+<p><em>Create tabbed plot for roi spectra.</em></p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L311" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_roi_peak_patterns" class="level3">
+<h3 class="anchored" data-anchor-id="plot_roi_peak_patterns">plot_roi_peak_patterns</h3>
+<blockquote class="blockquote">
+<pre><code> plot_roi_peak_patterns (roi_cube, prominence=2, ax=None)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L286" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_roi_ims" class="level3">
+<h3 class="anchored" data-anchor-id="get_roi_ims">get_roi_ims</h3>
+<blockquote class="blockquote">
+<pre><code> get_roi_ims (datastack_file, xylims_list)</code></pre>
+</blockquote>
+<p><em>Get high resolution roi images for <code>xylims_list</code>.</em></p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L259" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_slice_map" class="level3">
+<h3 class="anchored" data-anchor-id="get_slice_map">get_slice_map</h3>
+<blockquote class="blockquote">
+<pre><code> get_slice_map (datastack_file, element)</code></pre>
+</blockquote>
+<p>*Compute simple single channel maps from <code>datastack_file</code> cube for <code>element</code> alpha channel.</p>
+<p>Add ’_1’ to <code>element</code> string for beta peak slice map.</p>
+<p>Returns: slice_map, slice_idx*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L245" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="pick_nmf_elementmap" class="level3">
+<h3 class="anchored" data-anchor-id="pick_nmf_elementmap">pick_nmf_elementmap</h3>
+<blockquote class="blockquote">
+<pre><code> pick_nmf_elementmap (datastack_file, nmf_elementmaps, element)</code></pre>
+</blockquote>
+<p><em>Faster get nmf element map</em></p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L230" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_nmf_map" class="level3">
+<h3 class="anchored" data-anchor-id="get_nmf_map">get_nmf_map</h3>
+<blockquote class="blockquote">
+<pre><code> get_nmf_map (datastack_file, element)</code></pre>
+</blockquote>
+<p><em>Read computed NMF element map for <code>element</code> from <code>datastack</code>.</em></p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L207" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_roi_maps" class="level3">
+<h3 class="anchored" data-anchor-id="plot_roi_maps">plot_roi_maps</h3>
+<blockquote class="blockquote">
+<pre><code> plot_roi_maps (roi_cubes, xylims_list, roi_n, elements,
+                y_maxspectrum=None, exc_keV=23)</code></pre>
+</blockquote>
+<p>*Plot roi alpha maps for list of <code>elements</code>.</p>
+<p>If <code>y_maxspectrum</code> is specified normalize with maximum at channel index.*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L184" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_roi_maps" class="level3">
+<h3 class="anchored" data-anchor-id="get_roi_maps">get_roi_maps</h3>
+<blockquote class="blockquote">
+<pre><code> get_roi_maps (roi_cube, elements, x_keVs, exc_keV=23)</code></pre>
+</blockquote>
+<p>*Slice <code>roi cube</code> at alpha channel index positions for each element in <code>elements</code>.</p>
+<p>Returns: alpha_idxs, roi_maps, roi_vmax_list*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L144" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_element_lines" class="level3">
+<h3 class="anchored" data-anchor-id="plot_element_lines">plot_element_lines</h3>
+<blockquote class="blockquote">
+<pre><code> plot_element_lines (element, x_keVs, y=None, ax=None, exc_keV=23,
+                     color=None)</code></pre>
+</blockquote>
+<p><em>Add emission lines to spectral plot.</em></p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L123" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_element_lines" class="level3">
+<h3 class="anchored" data-anchor-id="get_element_lines">get_element_lines</h3>
+<blockquote class="blockquote">
+<pre><code> get_element_lines (element, x_keVs, exc_keV=23)</code></pre>
+</blockquote>
+<p>*Get sorted element peak idxs.</p>
+<p>Returns: peak_idxs_sorted*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L98" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_hotmax_spectra" class="level3">
+<h3 class="anchored" data-anchor-id="plot_hotmax_spectra">plot_hotmax_spectra</h3>
+<blockquote class="blockquote">
+<pre><code> plot_hotmax_spectra (spectra, x_keVs, hotmax_idxs, elems=None, xlim=[-1,
+                      22], elem_colors={'Pb': 'k', 'Au': 'orange', 'Fe':
+                      'brown', 'Ca': 'g', 'K': 'b', 'As': 'magenta', 'Na':
+                      'blue', 'Ni': 'red', 'Cu': 'green', 'Ti': 'blue',
+                      'Zn': 'red'}, y_maxspectrum=None)</code></pre>
+</blockquote>
+<p>*Plot roi hotmax spectra and add emission lines for list of elements <code>elems</code>.</p>
+<p>Returns: axs*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L70" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_hotmax_spectra" class="level3">
+<h3 class="anchored" data-anchor-id="get_hotmax_spectra">get_hotmax_spectra</h3>
+<blockquote class="blockquote">
+<pre><code> get_hotmax_spectra (roi_cube)</code></pre>
+</blockquote>
+<p>*Get hotmax spectra for <code>roi_cube</code>.</p>
+<p>Returns: <code>hotspot_idxs,</code>spectra`*</p>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L311" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="plot_roi_peak_patterns-1" class="level3">
+<h3 class="anchored" data-anchor-id="plot_roi_peak_patterns-1">plot_roi_peak_patterns</h3>
+<blockquote class="blockquote">
+<pre><code> plot_roi_peak_patterns (roi_cube, prominence=2, ax=None)</code></pre>
+</blockquote>
+<hr>
+<p><a href="https://github.com/fligt/falnama-dev/blob/master/falnama/dashboard.py#L24" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="get_roi_slice_hotmax" class="level3">
+<h3 class="anchored" data-anchor-id="get_roi_slice_hotmax">get_roi_slice_hotmax</h3>
+<blockquote class="blockquote">
+<pre><code> get_roi_slice_hotmax (datastack_file, slice_idx, xylims)</code></pre>
+</blockquote>
+<p>*Find full map and roi coordinates (x, y, roi_x, roi_y) of slice map maximum at channel <code>slice_idx</code> within ROI <code>xylims</code>.</p>
+<p>Returns: x, y, roi_x, roi_y, hotmax_spectrum*</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/vnd.jupyter.widget-state+json">
+{"state":{},"version_major":2,"version_minor":0}
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fligt\.github\.io\/falnama-dev");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./how-to-make-sense-of-8118-files.html" class="pagination-link" aria-label="How to make sense of thousands of data files?">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">How to make sense of thousands of data files?</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./file_table.html" class="pagination-link" aria-label="">
+        <span class="nav-page-text"></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/fligt/falnama-dev/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
